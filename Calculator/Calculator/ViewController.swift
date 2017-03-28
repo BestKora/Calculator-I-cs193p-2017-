@@ -46,7 +46,9 @@ class ViewController: UIViewController {
             if let value = newValue {
                 display.text = formatter.string(from: NSNumber(value:value))
             }
-             history.text = brain.description + (brain.resultIsPending ? " …" : " =")
+            if let description = brain.description {
+                history.text = description + (brain.resultIsPending ? " …" : " =")
+            }
         }
     }
     

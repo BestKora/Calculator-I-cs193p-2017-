@@ -376,5 +376,19 @@ class CalculatorUITests: XCTestCase {
         app.buttons["x⁻¹"].tap()
         XCTAssert(app.staticTexts["(1 + 3)⁻¹ ="].exists)
         XCTAssert(app.staticTexts["0.25"].exists)
+        
+        app.buttons["4"].tap()
+        app.buttons["5"].tap()
+        app.buttons["6"].tap()
+        app.buttons["+"].tap()
+        app.buttons["7"].tap()
+        app.buttons["8"].tap()
+        app.buttons["9"].tap()
+        app.buttons["⌫"].tap()
+        app.buttons["⌫"].tap()
+
+        XCTAssert(app.staticTexts["456 +  …"].exists)
+        XCTAssert(app.staticTexts["7"].exists)
+        
     }
 }

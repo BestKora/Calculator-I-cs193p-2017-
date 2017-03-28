@@ -11,17 +11,15 @@ import Foundation
 struct CalculatorBrain {
     
     private var accumulator :Double?
-    private var descriptionAccumulator = " "
+    private var descriptionAccumulator: String?
     
-    var description: String {
+    var description: String? {
         get {
             if pendingBinaryOperation == nil {
                 return descriptionAccumulator
             } else {
-                return pendingBinaryOperation!.descriptionFunction(
-                                        pendingBinaryOperation!.descriptionOperand,
-                       pendingBinaryOperation!.descriptionOperand !=
-                                        descriptionAccumulator ? descriptionAccumulator : "")
+                return  pendingBinaryOperation!.descriptionFunction(
+                    pendingBinaryOperation!.descriptionOperand, descriptionAccumulator ?? "")
             }
         }
     }
@@ -97,7 +95,7 @@ struct CalculatorBrain {
                     if  descriptionFunction == nil{
                        descriptionFunction = {symbol + "(" + $0 + ")"}
                     }
-                    descriptionAccumulator = descriptionFunction!(descriptionAccumulator)
+                    descriptionAccumulator = descriptionFunction!(descriptionAccumulator!)
                 }
             case .binaryOperation (let function, var descriptionFunction):
                 performPendingBinaryOperation()
@@ -109,8 +107,9 @@ struct CalculatorBrain {
                 pendingBinaryOperation = PendingBinaryOperation (function: function,
                                              firstOperand: accumulator!,
                                              descriptionFunction: descriptionFunction!,
-                                             descriptionOperand: descriptionAccumulator)
+                                             descriptionOperand: descriptionAccumulator!)
                     accumulator = nil
+                    descriptionAccumulator = nil
                 }
             case .equals:
                 performPendingBinaryOperation()
@@ -124,7 +123,7 @@ struct CalculatorBrain {
             accumulator =  pendingBinaryOperation!.perform(with: accumulator!)
             
             descriptionAccumulator =
-                pendingBinaryOperation!.performDescription(with: descriptionAccumulator)
+                pendingBinaryOperation!.performDescription(with: descriptionAccumulator!)
             
             pendingBinaryOperation = nil
         }
