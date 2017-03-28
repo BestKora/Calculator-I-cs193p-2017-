@@ -37,8 +37,7 @@ class ViewController: UIViewController {
     
     var displayValue: Double? {
         get {
-            if let text = display.text,
-                let value = Double(text){
+            if let text = display.text, let value = Double(text){
                 return value
             }
             return nil
@@ -76,8 +75,8 @@ class ViewController: UIViewController {
     @IBAction func backspace(_ sender: UIButton) {
         guard userInTheMiddleOfTyping && !display.text!.isEmpty else { return }
         display.text = String (display.text!.characters.dropLast())
-        if display.text!.isEmpty
-        {	displayValue = 0
+        if display.text!.isEmpty{
+            displayValue = 0
         }
     }
 }
