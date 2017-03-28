@@ -12,7 +12,6 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var history: UILabel!
-    
     @IBOutlet weak var tochka: UIButton!{
         didSet {
             tochka.setTitle(decimalSeparator, for: UIControlState())
@@ -36,12 +35,19 @@ class ViewController: UIViewController {
         }
     }
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
-            return Double(display.text!)!
+            if let text = display.text,
+                let value = Double(text){
+                return value
+            }
+            return nil
         }
         set {
-            display.text = formatter.string(from: NSNumber(value:newValue))
+            if let value = newValue {
+                display.text = formatter.string(from: NSNumber(value:value))
+            }
+             history.text = brain.description + (brain.resultIsPending ? " …" : " =")
         }
     }
     
@@ -49,22 +55,21 @@ class ViewController: UIViewController {
     
     @IBAction func performOPeration(_ sender: UIButton) {
         if userInTheMiddleOfTyping {
-            brain.setOperand(displayValue)
+            if let value = displayValue{
+                brain.setOperand(value)
+            }
             userInTheMiddleOfTyping = false
         }
         if  let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
         }
-        if let result = brain.result {
-            displayValue = result
-        }
-        
-        history.text = brain.description + (brain.resultIsPending ? " …" : " =")
+            displayValue = brain.result
     }
     
     @IBAction func clearAll(_ sender: UIButton) {
         brain.clear()
         displayValue = 0
+        userInTheMiddleOfTyping = false
         history.text = " "
     }
     
@@ -72,8 +77,7 @@ class ViewController: UIViewController {
         guard userInTheMiddleOfTyping && !display.text!.isEmpty else { return }
         display.text = String (display.text!.characters.dropLast())
         if display.text!.isEmpty
-        {	displayValue = 0.0
-            userInTheMiddleOfTyping = false
+        {	displayValue = 0
         }
     }
 }
