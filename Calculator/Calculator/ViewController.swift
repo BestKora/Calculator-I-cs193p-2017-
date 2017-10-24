@@ -37,7 +37,9 @@ class ViewController: UIViewController {
     
     var displayValue: Double? {
         get {
-            if let text = display.text, let value = Double(text){
+            if let text = display.text, let value = formatter.number(from: text) as? Double
+                /*Double(text)*/
+            {
                 return value
             }
             return nil
@@ -46,6 +48,7 @@ class ViewController: UIViewController {
             if let value = newValue {
                 display.text = formatter.string(from: NSNumber(value:value))
             }
+            
             if let description = brain.description {
                 history.text = description + (brain.resultIsPending ? " …" : " =")
             }
